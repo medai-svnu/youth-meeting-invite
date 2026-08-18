@@ -38,6 +38,7 @@ type AgendaItem = {
   note: string;
   tap: string;
   icon: LucideIcon;
+  featured?: boolean;
 };
 
 type Boost = {
@@ -80,10 +81,10 @@ const MALE_TEMPLATE: Template = {
   sectionAccent: "وإحنا بنشعل الليلة.",
   sectionCopy: "كل محطة هتدّيك طاقة جديدة. اضغط عليها واحدة واحدة وشوف النداء بيزيد إزاي.",
   agendaLabel: "المسار الليلي",
-  agendaLead: "اتحرك معانا من أول شرارة لآخر لحظة",
-  surpriseTitle: "في حاجة مستخبية للفريق.",
-  surpriseCopy: "بس مش هتعرفها غير وإنت وسطنا.",
-  surpriseButton: "افتح التلميح",
+  agendaLead: "كل محطة بتمهّد للحدث الرئيسي عند 7:30",
+  surpriseTitle: "الحدث الرئيسي يبدأ هنا.",
+  surpriseCopy: "دي لحظة الليلة اللي كلنا مستنيينها — وجودك فيها هو الفرق.",
+  surpriseButton: "شوف الوعد",
   finalEyebrow: "المقعد ليك",
   finalTitle: "يا {name}، الفريق",
   finalAccent: "ناقص من غيرك.",
@@ -98,7 +99,7 @@ const MALE_TEMPLATE: Template = {
   agenda: [
     { time: "7:00", title: "الصلاة", note: "نبدأها بقلب واحد وتركيز كامل.", tap: "أول شرارة اتفتحت.", icon: Flame },
     { time: "7:20", title: "الترانيم", note: "صوتك جزء من الصورة الكبيرة.", tap: "الصوت بدأ يعلى.", icon: Music2 },
-    { time: "7:30", title: "ملف سرّي", note: "مش هنحرقه… تعالى وشوف بنفسك.", tap: "التلميح اتسجّل عندك.", icon: LockKeyhole },
+    { time: "7:30", title: "الحدث الرئيسي", note: "لحظة الليلة الأهم — تعالى علشان تكون في قلبها.", tap: "أنت دلوقتي عرفت ميعاد أهم لحظة.", icon: LockKeyhole, featured: true },
     { time: "8:15", title: "ملحمة الأسر", note: "وقت الضحك واللمة والروح الحلوة.", tap: "اللمة اكتملت بوجودك.", icon: HeartHandshake },
   ],
 };
@@ -113,10 +114,10 @@ const FEMALE_TEMPLATE: Template = {
   sectionAccent: "دي مساحتك وسطنا.",
   sectionCopy: "كل لمسة هتنور محطة جديدة. اضغطي على التفاصيل وخلّي اللمعة تكمل معاكي.",
   agendaLabel: "حكاية الأربعاء",
-  agendaLead: "خيط نور صغير يوصلنا من أول لحظة لآخر ضحكة",
-  surpriseTitle: "في لمعة خاصة مستخبية ليكي.",
-  surpriseCopy: "ومكانها الحقيقي هيكون وإنت وسطنا.",
-  surpriseButton: "شوفي التلميح",
+  agendaLead: "كل لحظة بتوصلنا للحدث الرئيسي عند 7:30",
+  surpriseTitle: "الحدث الرئيسي هنا.",
+  surpriseCopy: "دي لحظة الليلة اللي كلنا مستنيينها — وجودك فيها هو الفرق.",
+  surpriseButton: "شوفي الوعد",
   finalEyebrow: "كرسيك مستنيكي",
   finalTitle: "يا {name}، الحكاية",
   finalAccent: "أحلى بوجودك.",
@@ -131,7 +132,7 @@ const FEMALE_TEMPLATE: Template = {
   agenda: [
     { time: "7:00", title: "الصلاة", note: "نبدأها براحة القلب ودفء اللمة.", tap: "أول لمعة ظهرت.", icon: Flame },
     { time: "7:20", title: "الترانيم", note: "صوت واحد وفرحة بتكبر بينا.", tap: "الفرحة بدأت تسمع.", icon: Music2 },
-    { time: "7:30", title: "سر صغير", note: "مش هنقول… بس يستاهل إنك تيجي.", tap: "التلميح بقى ملكك.", icon: Sparkles },
+    { time: "7:30", title: "الحدث الرئيسي", note: "لحظة الليلة الأهم — تعالي علشان تكوني في قلبها.", tap: "أنتِ دلوقتي عرفتي ميعاد أهم لحظة.", icon: Sparkles, featured: true },
     { time: "8:15", title: "ملحمة الأسر", note: "لمة فيها حكايات وضحك وقرب أكتر.", tap: "اللمة نورت بوجودك.", icon: HeartHandshake },
   ],
 };
@@ -284,11 +285,11 @@ export default function Home() {
               const Icon = item.icon;
               const active = activeAgenda === index;
               return (
-                <li key={item.time}>
-                  <button className={`agenda-item ${active ? "is-active" : ""}`} onClick={() => setActiveAgenda(index)} aria-pressed={active}>
+                <li key={item.time} className={item.featured ? "is-featured" : ""}>
+                  <button className={`agenda-item ${active ? "is-active" : ""} ${item.featured ? "is-featured" : ""}`} onClick={() => setActiveAgenda(index)} aria-pressed={active}>
                     <span className="agenda-time"><b>{item.time}</b><small>م</small></span>
                     <span className="agenda-marker"><Icon size={18} /></span>
-                    <span className="agenda-copy"><strong>{item.title}</strong><small>{active ? item.tap : item.note}</small></span>
+                    <span className="agenda-copy"><strong>{item.title}</strong>{item.featured && <span className="main-event-tag"><img src={MARK_URL} alt="" aria-hidden="true" /><Sparkles size={11} /> الحدث الأهم اليوم</span>}<small>{active ? item.tap : item.note}</small></span>
                     <Sparkles className="agenda-spark" size={14} />
                   </button>
                 </li>
@@ -297,9 +298,9 @@ export default function Home() {
           </ol>
         </div>
 
-        <div className="surprise-block">
+        <div className="surprise-block main-event-block">
           <div className="surprise-orb"><Sparkles size={28} /></div>
-          <div><span className="surprise-label">عند 7:30</span><h3>{template.surpriseTitle}</h3><p>{template.surpriseCopy}</p></div>
+          <div><span className="surprise-label">الحدث الرئيسي · 7:30 م</span><h3>{template.surpriseTitle}</h3><p>{template.surpriseCopy}</p></div>
           <button className="surprise-button" onClick={() => setSurpriseOpen(true)}>{template.surpriseButton}</button>
         </div>
       </section>
@@ -311,16 +312,16 @@ export default function Home() {
           <h2>{template.finalTitle.replace("{name}", invitation.name)}<br /><em>{template.finalAccent}</em></h2>
           <p className="closing-text">{template.finalCopy}<br />{invitation.call} نخليها ليلة تفضل في الذاكرة.</p>
           <a href="#invite-title" className="join-button"><span>{invitation.female ? "أنا جاية بإذن الله" : "أنا جاي بإذن الله"}</span><ArrowDown size={19} /></a>
-          <p className="date-note"><CalendarDays size={16} /> الأربعاء، البداية 7:00 مساءً</p>
+          <p className="date-note"><CalendarDays size={16} /> الأربعاء، البداية 7:00 م · الحدث الرئيسي 7:30 م</p>
         </div>
       </section>
 
       {surpriseOpen && <div className="surprise-modal" role="dialog" aria-modal="true" aria-labelledby="surprise-title">
         <button className="modal-close" onClick={() => setSurpriseOpen(false)} aria-label="إغلاق"><X size={20} /></button>
         <div className="modal-spark"><Sparkles size={31} /></div>
-        <p>{invitation.female ? "خليكي فضولية شوية" : "خليك متحمس شوية"}</p>
-        <h2 id="surprise-title">{invitation.female ? "المفاجأة الحقيقية\nإنك تكوني موجودة." : "المفاجأة الحقيقية\nإنك تكون موجود."}</h2>
-        <span>الأربعاء · 7:30 م</span>
+        <p>الحدث الرئيسي في الليلة</p>
+        <h2 id="surprise-title">{invitation.female ? "مش تفصيلة في البرنامج.\nدي لحظة الليلة." : "مش تفصيلة في البرنامج.\nدي لحظة الليلة."}</h2>
+        <span>الأربعاء · 7:30 م · الحدث الأهم</span>
         <button onClick={() => setSurpriseOpen(false)}>{invitation.female ? "وعد… هاجي" : "وعد… هاجي"}</button>
       </div>}
     </main>
