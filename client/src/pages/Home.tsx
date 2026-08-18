@@ -24,6 +24,7 @@ function timeUntil(target: Date) {
     [Math.floor(value / 86400000), "يوم"],
     [Math.floor((value % 86400000) / 3600000), "ساعة"],
     [Math.floor((value % 3600000) / 60000), "دقيقة"],
+    [Math.floor((value % 60000) / 1000), "ثانية"],
   ] as const;
 }
 
