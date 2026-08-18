@@ -10,7 +10,7 @@ const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
 const TIMELINE_ART_URL = "/manus-storage/youth-timeline-art_48b0c82b.jpg";
 const FINAL_ART_URL = "/manus-storage/youth-final-invite_06dcd079.jpg";
 
-type Session = { time: string; title: string; note: string };
+type Session = { time: string; title: string; note: string; featured?: boolean };
 
 function nextWednesdayAtSeven() {
   const now = new Date();
@@ -32,9 +32,9 @@ function calendarLink() {
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
   const query = new URLSearchParams({
     action: "TEMPLATE",
-    text: "اجتماع الشباب بالأقصر",
+    text: "اجتماع الشباب بالأقصر — الحدث الرئيسي 7:30",
     dates: `${calendarStamp(start)}/${calendarStamp(end)}`,
-    details: "الصلاة 7:00 · الترانيم 7:20 · مفاجأة 7:30 · ملحمة الأسر 8:15",
+    details: "الصلاة 7:00 · الترانيم 7:20 · الحدث الرئيسي 7:30 · ملحمة الأسر 8:15",
   });
   return `https://calendar.google.com/calendar/render?${query.toString()}`;
 }
@@ -52,13 +52,13 @@ export default function Invite() {
     ? [
         { time: "7:00", title: "الصلاة", note: "نبدأ براحة القلب ودفء اللمة." },
         { time: "7:20", title: "الترانيم", note: "صوت واحد وفرحة بتكبر بينا." },
-        { time: "7:30", title: "مفاجأة صغيرة", note: "هنسيبها لحظة حلوة لما توصلي." },
+        { time: "7:30", title: "الحدث الرئيسي", note: "دي لحظة الليلة الأهم — وجودك فيها هو اللي يكمّلها.", featured: true },
         { time: "8:15", title: "ملحمة الأسر", note: "ضحك وحكايات وقرب أكتر." },
       ]
     : [
         { time: "7:00", title: "الصلاة", note: "بداية هادية بقلب واحد." },
         { time: "7:20", title: "الترانيم", note: "صوتك جزء من الصورة." },
-        { time: "7:30", title: "مفاجأة", note: "مش هنحرقها… تعالى وشوف." },
+        { time: "7:30", title: "الحدث الرئيسي", note: "دي لحظة الليلة الأهم — تعالى علشان تكون في قلبها.", featured: true },
         { time: "8:15", title: "ملحمة الأسر", note: "لمة وضحك وروح فريق." },
       ];
 
@@ -66,8 +66,8 @@ export default function Invite() {
   const share = async () => {
     const url = window.location.href;
     const text = female
-      ? "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء الساعة 7:00 م. تعالي معايا!"
-      : "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء الساعة 7:00 م. تعالى معايا!";
+      ? "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. البداية 7:00 م والحدث الرئيسي 7:30 م. تعالي معايا!"
+      : "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. البداية 7:00 م والحدث الرئيسي 7:30 م. تعالى معايا!";
     try {
       if (navigator.share) {
         await navigator.share({ title: "اجتماع الشباب بالأقصر", text, url });
@@ -96,7 +96,7 @@ export default function Invite() {
           <p className="invite-eyebrow">{opening.eyebrow}</p>
           <h1>{opening.headline.replace("{name}", name)}</h1>
           <p>{opening.copy}</p>
-          <div className="time-chip"><Clock3 size={16} /> الأربعاء · 7:00 مساءً</div>
+          <div className="time-chip"><Clock3 size={16} /> الأربعاء · البداية 7:00 م · الحدث الرئيسي 7:30 م</div>
         </div>
         <div className="personal-note" style={{ backgroundImage: `linear-gradient(135deg, rgba(3,17,29,.92), rgba(3,17,29,.46)), url(${TIMELINE_ART_URL})` }}>
           <span>{female ? "رسالة هذا الأسبوع" : "خطة الليلة"}</span>
@@ -106,17 +106,17 @@ export default function Invite() {
       </section>
 
       <section className="program-section" aria-labelledby="program-title">
-        <div className="program-head"><p>برنامج الاجتماع</p><h2 id="program-title">{female ? "حكاية الأربعاء خطوة بخطوة" : "المسار من أول شرارة لآخر لمة"}</h2></div>
+        <div className="program-head"><p>برنامج الاجتماع</p><h2 id="program-title">{female ? "كل خطوة توصّلك للحدث الرئيسي" : "كل محطة بتوصّلك لحدث الليلة الرئيسي"}</h2></div>
         <ol className={`male-sessions ${female ? "soft-sessions" : ""}`}>
-          {sessions.map((session) => <li key={session.time}><time>{session.time}<small>م</small></time><span /><div><h3>{session.title}</h3><p>{session.note}</p></div></li>)}
+          {sessions.map((session) => <li key={session.time} className={session.featured ? "is-main-event" : ""}><time>{session.time}<small>م</small></time><span /><div>{session.featured && <span className="main-event-label"><Sparkles size={12} /> الحدث الأهم اليوم</span>}<h3>{session.title}</h3><p>{session.note}</p></div></li>)}
         </ol>
       </section>
 
       <section className="action-section" style={{ backgroundImage: `linear-gradient(90deg, rgba(3,15,26,.96), rgba(3,15,26,.58)), url(${FINAL_ART_URL})` }}>
         <div className="arrival-orbit" aria-hidden="true"><i /><i /><Sparkles size={16} /></div>
         <div>
-          <p><Sparkles size={15} /> قرار بسيط يفرق</p>
-          <h2>{female ? "سجّلي موعدك وخلي الكرسي ليكي." : "ثبّت موعدك وخلي مكانك ليك."}</h2>
+          <p><Sparkles size={15} /> خلي اسمك حاضر في الحدث الرئيسي</p>
+          <h2>{female ? "سجّلي موعدك وخلي مكانك جاهز عند 7:30." : "ثبّت موعدك وخلي مكانك جاهز عند 7:30."}</h2>
           <span>{female ? "هنستناكي الأربعاء." : "هنستناك الأربعاء."}</span>
         </div>
         <div className="action-buttons">

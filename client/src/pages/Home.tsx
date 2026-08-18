@@ -73,7 +73,7 @@ export default function Home() {
       </section>
 
       <section className="entry-countdown" aria-label="الوقت المتبقي للاجتماع">
-        <p><Clock3 size={15} /> باقي على الأربعاء الساعة 7:00 م</p>
+        <p><Clock3 size={15} /> البداية 7:00 م · الحدث الرئيسي 7:30 م</p>
         <div>
           {clock.map(([value, label]) => <span key={label}><b>{String(value).padStart(2, "0")}</b><small>{label}</small></span>)}
         </div>
