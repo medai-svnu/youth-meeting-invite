@@ -7,7 +7,6 @@ import { CalendarDays, Clock3, DoorOpen } from "lucide-react";
 import { useLocation } from "wouter";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
-const HERO_URL = "/manus-storage/youth-night-hero_6ebeb0e1.jpg";
 
 function nextWednesdayAtSeven() {
   const now = new Date();
@@ -45,7 +44,7 @@ export default function Home() {
 
   return (
     <main className={`entry-shell ${female ? "entry-female" : "entry-male"}`} dir="rtl">
-      <div className="entry-art" style={{ backgroundImage: `url(${HERO_URL})` }} />
+      <div className="entry-art" />
       <div className="entry-overlay" />
       <header className="site-header">
         <div className="brand-lockup">

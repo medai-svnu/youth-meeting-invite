@@ -7,8 +7,6 @@ import { ArrowRight, CalendarPlus, CheckCircle2, ChevronRight, Clock3, Copy, Hea
 import { useLocation } from "wouter";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
-const TIMELINE_ART_URL = "/manus-storage/youth-timeline-art_48b0c82b.jpg";
-const FINAL_ART_URL = "/manus-storage/youth-final-invite_06dcd079.jpg";
 
 type Session = { time: string; title: string; note: string };
 
@@ -98,7 +96,7 @@ export default function Invite() {
           <p>{opening.copy}</p>
           <div className="time-chip"><Clock3 size={16} /> الأربعاء · 7:00 مساءً</div>
         </div>
-        <div className="personal-note" style={{ backgroundImage: `linear-gradient(135deg, rgba(3,17,29,.92), rgba(3,17,29,.46)), url(${TIMELINE_ART_URL})` }}>
+        <div className="personal-note">
           <span>{female ? "رسالة هذا الأسبوع" : "خطة الليلة"}</span>
           <strong>{female ? "خدي وقتك واهتمي إنك تيجي." : "خلي مكانك في الفريق محسوم."}</strong>
           <small>{female ? "هنفرح بوجودك." : "هنفرح بوجودك."}</small>
@@ -112,7 +110,7 @@ export default function Invite() {
         </ol>
       </section>
 
-      <section className="action-section" style={{ backgroundImage: `linear-gradient(90deg, rgba(3,15,26,.96), rgba(3,15,26,.58)), url(${FINAL_ART_URL})` }}>
+      <section className="action-section">
         <div className="arrival-orbit" aria-hidden="true"><i /><i /><Sparkles size={16} /></div>
         <div>
           <p><Sparkles size={15} /> قرار بسيط يفرق</p>
