@@ -1,6 +1,6 @@
 /**
- * Design philosophy: «نداء النور» — دعوة مستقلة وعملية: برنامج واضح، حضور في التقويم، ومشاركة حقيقية.
- * يحتفظ القالبان بهوية خدمة واحدة، لكنهما يختلفان في اللغة والبنية والإيقاع.
+ * Design philosophy: «قمر الأقصر» — دعوة ليلية هادئة وعملية: برنامج واضح، حضور في التقويم، ومشاركة حقيقية.
+ * يحتفظ القالبان بهوية واحدة داكنة ودافئة، ويختلفان في الصياغة الشخصية فقط.
  */
 import { useMemo, useState } from "react";
 import { ArrowRight, CalendarPlus, CheckCircle2, ChevronRight, Clock3, Copy, Heart, Share2, Sparkles } from "lucide-react";
@@ -30,9 +30,9 @@ function calendarLink() {
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
   const query = new URLSearchParams({
     action: "TEMPLATE",
-    text: "اجتماع الشباب بالأقصر — الحدث الرئيسي 7:30",
+    text: "اجتماع الشباب بالأقصر — البداية 7:00 م",
     dates: `${calendarStamp(start)}/${calendarStamp(end)}`,
-    details: "الصلاة 7:00 · الترانيم 7:20 · الحدث الرئيسي 7:30 · ملحمة الأسر 8:15",
+    details: "الحضور والبداية 7:00 · الصلاة 7:00 · الترانيم 7:20 · مفاجأة 7:30 · ملحمة الأسر 8:15",
   });
   return `https://calendar.google.com/calendar/render?${query.toString()}`;
 }
@@ -50,13 +50,13 @@ export default function Invite() {
     ? [
         { time: "7:00", title: "الصلاة", note: "نبدأ براحة القلب ودفء اللمة." },
         { time: "7:20", title: "الترانيم", note: "صوت واحد وفرحة بتكبر بينا." },
-        { time: "7:30", title: "الحدث الرئيسي", note: "دي لحظة الليلة الأهم — وجودك فيها هو اللي يكمّلها.", featured: true },
+        { time: "7:30", title: "المفاجأة", note: "مش هنحرقها دلوقتي… بس لازم تكوني موجودة من البداية.", featured: true },
         { time: "8:15", title: "ملحمة الأسر", note: "ضحك وحكايات وقرب أكتر." },
       ]
     : [
         { time: "7:00", title: "الصلاة", note: "بداية هادية بقلب واحد." },
         { time: "7:20", title: "الترانيم", note: "صوتك جزء من الصورة." },
-        { time: "7:30", title: "الحدث الرئيسي", note: "دي لحظة الليلة الأهم — تعالى علشان تكون في قلبها.", featured: true },
+        { time: "7:30", title: "المفاجأة", note: "مش هنحرقها دلوقتي… بس تعالى من البداية عشان متفوتكش.", featured: true },
         { time: "8:15", title: "ملحمة الأسر", note: "لمة وضحك وروح فريق." },
       ];
 
@@ -64,8 +64,8 @@ export default function Invite() {
   const share = async () => {
     const url = window.location.href;
     const text = female
-      ? "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. البداية 7:00 م والحدث الرئيسي 7:30 م. تعالي معايا!"
-      : "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. البداية 7:00 م والحدث الرئيسي 7:30 م. تعالى معايا!";
+      ? "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. ميعادنا من 7:00 م. تعالي معايا من البداية!"
+      : "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. ميعادنا من 7:00 م. تعالى معايا من البداية!";
     try {
       if (navigator.share) {
         await navigator.share({ title: "اجتماع الشباب بالأقصر", text, url });
@@ -79,8 +79,8 @@ export default function Invite() {
   };
 
   const opening = female
-    ? { eyebrow: "رسالة ليكي", headline: "يا {name}، وجودك يكمّل الحكاية.", copy: "مساء بسيط، ناس قريبة، وحضورك هيخليه أحلى." }
-    : { eyebrow: "نداء للفريق", headline: "يا {name}، الفريق مستنيك.", copy: "ليلة خفيفة، ناس حلوة، ومكانك واضح من أول لحظة." };
+    ? { eyebrow: "رسالة ليكي", headline: "يا {name}، وجودك يكمّل الحكاية.", copy: "مساء هادي، ناس قريبة، وميعادنا من أول دقيقة الساعة 7:00 م." }
+    : { eyebrow: "نداء للفريق", headline: "يا {name}، الفريق مستنيك.", copy: "ليلة هادية، ناس حلوة، وتعالى من البداية الساعة 7:00 م." };
 
   return (
     <main className={`invite-page ${female ? "invite-female" : "invite-male"}`} dir="rtl">
@@ -94,39 +94,39 @@ export default function Invite() {
           <p className="invite-eyebrow">{opening.eyebrow}</p>
           <h1>{opening.headline.replace("{name}", name)}</h1>
           <p>{opening.copy}</p>
-          <div className="time-chip"><Clock3 size={16} /> الأربعاء · البداية 7:00 م · الحدث الرئيسي 7:30 م</div>
+          <div className="time-chip"><Clock3 size={16} /> الأربعاء · الحضور والبداية 7:00 م</div>
         </div>
         <div className="personal-note">
           <span>{female ? "رسالة هذا الأسبوع" : "خطة الليلة"}</span>
-          <strong>{female ? "خدي وقتك واهتمي إنك تيجي." : "خلي مكانك في الفريق محسوم."}</strong>
+          <strong>{female ? "خدي وقتك وتعالي من أول دقيقة." : "خلي مكانك في الفريق محسوم من البداية."}</strong>
           <small>{female ? "هنفرح بوجودك." : "هنفرح بوجودك."}</small>
         </div>
       </section>
 
       <section className="program-section" aria-labelledby="program-title">
-        <div className="program-head"><p>برنامج الاجتماع</p><h2 id="program-title">{female ? "كل خطوة توصّلك للحدث الرئيسي" : "كل محطة بتوصّلك لحدث الليلة الرئيسي"}</h2></div>
+        <div className="program-head"><p>برنامج الاجتماع</p><h2 id="program-title">{female ? "ليلة بسيطة من أول خطوة" : "ليلة كاملة من أول لحظة"}</h2></div>
         <ol className={`male-sessions ${female ? "soft-sessions" : ""}`}>
-          {sessions.map((session) => <li key={session.time} className={session.featured ? "is-main-event" : ""}><time>{session.time}<small>م</small></time><span /><div>{session.featured && <span className="main-event-label"><Sparkles size={12} /> الحدث الأهم اليوم</span>}<h3>{session.title}</h3><p>{session.note}</p></div></li>)}
+          {sessions.map((session) => <li key={session.time} className={session.featured ? "is-main-event" : ""}><time>{session.time}<small>م</small></time><span /><div>{session.featured && <span className="main-event-label"><Sparkles size={12} /> لحظة خاصة الليلة</span>}<h3>{session.title}</h3><p>{session.note}</p></div></li>)}
         </ol>
       </section>
 
       <section className="action-section">
         <div className="arrival-orbit" aria-hidden="true"><i /><i /><Sparkles size={16} /></div>
         <div>
-          <p><Sparkles size={15} /> خلي اسمك حاضر في الحدث الرئيسي</p>
-          <h2>{female ? "سجّلي موعدك وخلي مكانك جاهز عند 7:30." : "ثبّت موعدك وخلي مكانك جاهز عند 7:30."}</h2>
-          <span>{female ? "هنستناكي الأربعاء." : "هنستناك الأربعاء."}</span>
+          <p><Sparkles size={15} /> خلي اسمك حاضر من البداية</p>
+          <h2>{female ? "سجّلي موعدك وتعالي الساعة 7:00 م." : "ثبّت موعدك وتعالى الساعة 7:00 م."}</h2>
+          <span>{female ? "هنستناكي من أول دقيقة." : "هنستناك من أول دقيقة."}</span>
         </div>
         <div className="action-buttons">
           <a className={`calendar-action ${attending ? "is-attending" : ""}`} href={calendar} target="_blank" rel="noreferrer" onClick={() => setAttending(true)}>
             {attending ? <CheckCircle2 size={19} /> : <CalendarPlus size={19} />}
-            <span>{attending ? "تم فتح التقويم" : female ? "أنا جاية — ضيفي الموعد" : "أنا جاي — ضيف الموعد"}</span>
+            <span>{attending ? "تم فتح التقويم" : female ? "أنا جاية 7:00 م — ضيفي الموعد" : "أنا جاي 7:00 م — ضيف الموعد"}</span>
           </a>
           <button className="share-action" onClick={share}><Share2 size={18} /> {female ? "شاركي الرسالة" : "شارك الدعوة"}</button>
           {shareNote && <p className="share-note"><Copy size={14} /> {shareNote}</p>}
         </div>
       </section>
-      <p className="calendar-note"><Heart size={14} /> الضغط على الحضور يفتح حدث الاجتماع في تقويمك لتضيفه فعلياً.</p>
+      <p className="calendar-note"><Heart size={14} /> اضغطي أو اضغط حضور، وسيُفتح موعدنا في تقويمك علشان متفوتناش من أول دقيقة.</p>
     </main>
   );
 }

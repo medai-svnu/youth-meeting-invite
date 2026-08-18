@@ -1,6 +1,6 @@
 /**
- * Design philosophy: «نداء النور» — صفحة دخول هادئة وشخصية تقود إلى دعوة مستقلة.
- * لا تفاعلات للزينة: الاسم والموعد وزر واحد واضح لفتح الدعوة المناسبة.
+ * Design philosophy: «قمر الأقصر» — صفحة دخول ليلية هادئة تشبه رسالة شخصية تحت ضوء القمر.
+ * الاسم والموعد هما البطلان؛ لا مؤثرات إلكترونية ولا تفاعلات للزينة.
  */
 import { useEffect, useMemo, useState } from "react";
 import { CalendarDays, Clock3, DoorOpen } from "lucide-react";
@@ -62,8 +62,8 @@ export default function Home() {
         </div>
         <p className="entry-copy">
           {female
-            ? "في رسالة صغيرة مستنياكي… افتحيها وشوفي ليه الأربعاء ده ليكي."
-            : "في دعوة باسمك مستنياك… افتحها وشوف مكانك في ليلة الأربعاء."}
+            ? "في رسالة صغيرة مستنياكي… وميعادنا من أول دقيقة، الساعة 7:00 م."
+            : "في دعوة باسمك مستنياك… وتعالى من البداية، الساعة 7:00 م."}
         </p>
         <button className="open-invite" onClick={openInvitation}>
           <DoorOpen size={19} />
@@ -72,7 +72,7 @@ export default function Home() {
       </section>
 
       <section className="entry-countdown" aria-label="الوقت المتبقي للاجتماع">
-        <p><Clock3 size={15} /> البداية 7:00 م · الحدث الرئيسي 7:30 م</p>
+        <p><Clock3 size={15} /> الأربعاء · الحضور والبداية 7:00 م</p>
         <div>
           {clock.map(([value, label]) => <span key={label}><b>{String(value).padStart(2, "0")}</b><small>{label}</small></span>)}
         </div>
