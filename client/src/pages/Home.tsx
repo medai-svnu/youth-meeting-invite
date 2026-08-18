@@ -78,7 +78,7 @@ export default function Home() {
             <img src={LOGO_URL} alt="شعار اجتماع الشباب" className="service-logo" />
             <div className="brand-copy">
               <span>اجتماع الشباب</span>
-              <strong>شباب الأنبا موسى</strong>
+              <strong>اجتماع الشباب بالأقصر</strong>
             </div>
           </div>
           <div className="wednesday-chip"><CalendarDays size={14} /> الأربعاء</div>
