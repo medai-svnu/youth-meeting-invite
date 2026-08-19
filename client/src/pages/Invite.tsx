@@ -49,7 +49,7 @@ export default function Invite() {
   const [, setLocation] = useLocation();
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
   const female = params.get("g")?.toLowerCase() === "f";
-  const name = (params.get("name") || "").trim() || (female ? "يا جميلة" : "يا بطل");
+  const name = ((params.get("name") || "").trim().replace(/^يا\s+/, "") || (female ? "جميلة" : "بطل"));
   const [attending, setAttending] = useState(false);
   const [shareNote, setShareNote] = useState("");
   const [reaction, setReaction] = useState<string | null>(null);
