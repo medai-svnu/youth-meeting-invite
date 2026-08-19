@@ -47,9 +47,9 @@ const vibes: Vibe[] = [
 ];
 
 export default function Invite() {
-  const [, setLocation] = useLocation();
-  const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const profile = useMemo(() => getInviteProfile(), []);
+  const [location, setLocation] = useLocation();
+  const params = useMemo(() => new URLSearchParams(window.location.search), [location]);
+  const profile = useMemo(() => getInviteProfile(window.location.search), [location]);
   const [attending, setAttending] = useState(false);
   const [shareNote, setShareNote] = useState("");
   const [reaction, setReaction] = useState<string | null>(null);

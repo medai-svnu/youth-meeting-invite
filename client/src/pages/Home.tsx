@@ -30,7 +30,7 @@ function timeUntil(target: Date) {
 }
 
 export default function Home() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [target] = useState(nextWednesdayAtSeven);
   const [clock, setClock] = useState(() => timeUntil(target));
   const [progress, setProgress] = useState(0);
@@ -38,8 +38,8 @@ export default function Home() {
   const [joined, setJoined] = useState(false);
   const [secretPresses, setSecretPresses] = useState(0);
   const [secretOpen, setSecretOpen] = useState(false);
-  const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const profile = useMemo(() => getInviteProfile(), []);
+  const params = useMemo(() => new URLSearchParams(window.location.search), [location]);
+  const profile = useMemo(() => getInviteProfile(window.location.search), [location]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setClock(timeUntil(target)), 1000);

@@ -117,11 +117,31 @@ function safelyDecode(value: string) {
   }
 }
 
+function normalizedSearch(search: string) {
+  if (/^https?:\/\//i.test(search)) {
+    try {
+      return new URL(search).search;
+    } catch {
+      return search;
+    }
+  }
+  return search.startsWith("?") ? search : `?${search}`;
+}
+
+function normalizedName(value: string) {
+  return safelyDecode(value)
+    .normalize("NFC")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
+    .replace(/^يا\s+/, "")
+    .trim();
+}
+
 export function getInviteProfile(search = window.location.search): InviteProfile {
-  const params = new URLSearchParams(search);
+  const params = new URLSearchParams(normalizedSearch(search));
   const rawGender = params.get("g")?.trim().toLowerCase();
   const gender: InviteGender = rawGender === "f" ? "female" : rawGender === "m" ? "male" : "neutral";
-  const suppliedName = safelyDecode((params.get("name") || "").trim()).replace(/^يا\s+/, "").trim();
+  const suppliedName = normalizedName(params.get("name") || "");
   const name = suppliedName || "ضيفنا";
   const extras = Object.fromEntries(Array.from(params.entries()).filter(([key]) => key !== "name" && key !== "g"));
 
