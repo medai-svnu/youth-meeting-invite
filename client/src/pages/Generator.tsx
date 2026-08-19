@@ -1,7 +1,7 @@
 /**
  * Design philosophy: «Wednesday Pulse / Link Lab» — أداة داخلية واضحة، تجعل تجهيز الدعوات الشخصية دفعة واحدة سريعاً ومنظماً.
  */
-import { ArrowUpLeft, Check, ChevronRight, Copy, Download, ExternalLink, Link2, Sparkles, UsersRound, WandSparkles } from "lucide-react";
+import { ArrowUpLeft, Check, ChevronRight, Copy, Download, ExternalLink, Link2, MessageCircle, Sparkles, UsersRound, WandSparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 
@@ -39,6 +39,11 @@ async function copyToClipboard(value: string) {
   field.select();
   document.execCommand("copy");
   field.remove();
+}
+
+function whatsAppShareUrl(link: InviteLink) {
+  const message = `يا ${link.name} ✨\nدي دعوتك لاجتماع الشباب بالأقصر يوم الأربعاء الساعة 7:00 م.\nمستنيينك من أول دقيقة 🔥\n${link.url}`;
+  return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
 export default function Generator() {
@@ -144,7 +149,7 @@ export default function Generator() {
                 {links.map((link) => <article key={link.id} className={`generated-link ${link.gender === "f" ? "girl-link" : "boy-link"}`}>
                   <div><b>{link.name}</b><small>{link.gender === "f" ? "قالب البنات" : "قالب الأولاد"}</small></div>
                   <code>{link.url}</code>
-                  <div className="link-actions"><button type="button" onClick={() => void copyOne(link)}>{copiedId === link.id ? <Check size={15} /> : <Copy size={15} />}{copiedId === link.id ? "تم النسخ" : "نسخ"}</button><a href={link.url} target="_blank" rel="noreferrer"><ExternalLink size={15} /> معاينة</a></div>
+                  <div className="link-actions"><button type="button" onClick={() => void copyOne(link)}>{copiedId === link.id ? <Check size={15} /> : <Copy size={15} />}{copiedId === link.id ? "تم النسخ" : "نسخ"}</button><a className="whatsapp-action" href={whatsAppShareUrl(link)} target="_blank" rel="noreferrer" aria-label={`إرسال دعوة ${link.name} عبر واتساب`}><MessageCircle size={15} /> واتساب</a><a href={link.url} target="_blank" rel="noreferrer"><ExternalLink size={15} /> معاينة</a></div>
                 </article>)}
               </div>
               <div className="bulk-actions"><button type="button" onClick={() => void copyAll()}><Copy size={16} /> نسخ كل الروابط</button><button type="button" onClick={downloadList}><Download size={16} /> تنزيل القائمة</button></div>
