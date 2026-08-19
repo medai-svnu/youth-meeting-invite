@@ -1,10 +1,10 @@
 /**
- * Design philosophy: «قمر الأقصر» — صفحة دخول ليلية هادئة تشبه رسالة شخصية تحت ضوء القمر.
- * الاسم والموعد هما البطلان؛ لا مؤثرات إلكترونية ولا تفاعلات للزينة.
+ * Design philosophy: «Wednesday Pulse» — افتتاح قصصي عالي الطاقة، يبقي الاسم والموعد في المركز ويقود إلى الدعوة.
  */
+import { CalendarDays, ChevronDown, Clock3, DoorOpen, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Clock3, DoorOpen } from "lucide-react";
 import { useLocation } from "wouter";
+import { VibeToggle } from "@/components/VibeToggle";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
 
@@ -21,10 +21,10 @@ function nextWednesdayAtSeven() {
 function timeUntil(target: Date) {
   const value = Math.max(0, target.getTime() - Date.now());
   return [
-    [Math.floor(value / 86400000), "يوم"],
-    [Math.floor((value % 86400000) / 3600000), "ساعة"],
-    [Math.floor((value % 3600000) / 60000), "دقيقة"],
-    [Math.floor((value % 60000) / 1000), "ثانية"],
+    [Math.floor(value / 86400000), "DAYS"],
+    [Math.floor((value % 86400000) / 3600000), "HOURS"],
+    [Math.floor((value % 3600000) / 60000), "MINUTES"],
+    [Math.floor((value % 60000) / 1000), "SECONDS"],
   ] as const;
 }
 
@@ -32,6 +32,11 @@ export default function Home() {
   const [, setLocation] = useLocation();
   const [target] = useState(nextWednesdayAtSeven);
   const [clock, setClock] = useState(() => timeUntil(target));
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [joined, setJoined] = useState(false);
+  const [secretPresses, setSecretPresses] = useState(0);
+  const [secretOpen, setSecretOpen] = useState(false);
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
   const female = params.get("g")?.toLowerCase() === "f";
   const name = (params.get("name") || "").trim() || (female ? "يا جميلة" : "يا بطل");
@@ -41,12 +46,53 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, [target]);
 
-  const openInvitation = () => setLocation(`/invite?${params.toString()}`);
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setProgress((current) => {
+        const next = Math.min(100, current + 20);
+        if (next === 100) {
+          window.clearInterval(timer);
+          window.setTimeout(() => setLoading(false), 180);
+        }
+        return next;
+      });
+    }, 120);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const openInvitation = () => {
+    if (joined) return;
+    setJoined(true);
+    window.setTimeout(() => setLocation(`/invite?${params.toString()}`), 720);
+  };
+
+  const unlockSecret = () => {
+    const next = secretPresses + 1;
+    if (next >= 5) {
+      setSecretOpen(true);
+      setSecretPresses(0);
+      return;
+    }
+    setSecretPresses(next);
+  };
+
+  if (loading) {
+    return (
+      <main className="loading-screen" dir="ltr" aria-live="polite">
+        <div className="loading-orbit"><i /><i /><span><Sparkles size={20} /></span></div>
+        <p>LOADING WEDNESDAY...</p>
+        <div className="loading-track"><i style={{ width: `${progress}%` }} /></div>
+        <b>{progress}%</b>
+        <strong>{progress === 100 ? "LET'S GO" : "GETTING THE VIBE READY"}</strong>
+      </main>
+    );
+  }
 
   return (
-    <main className={`entry-shell ${female ? "entry-female" : "entry-male"}`} dir="rtl">
+    <main className={`entry-shell pulse-shell ${female ? "entry-female" : "entry-male"}`} dir="rtl">
       <div className="entry-art" />
       <div className="entry-overlay" />
+      <div className="pulse-particles" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
       <header className="site-header">
         <div className="brand-lockup">
           <img src={LOGO_URL} className="brand-logo" alt="شعار اجتماع الشباب بالأقصر" />
@@ -54,30 +100,48 @@ export default function Home() {
         </div>
         <div className="header-day"><CalendarDays size={15} /> الأربعاء</div>
       </header>
+      <VibeToggle />
 
-      <section className="entry-card" aria-labelledby="entry-name">
+      <section className="entry-card pulse-entry" aria-labelledby="entry-name">
+        <button className="secret-date" type="button" onClick={unlockSecret} aria-label="الأربعاء">
+          الأربعاء <small>WEDNESDAY</small>
+        </button>
+        <p className="hero-time">7:00 <small>PM</small></p>
         <div className="entry-name-ritual">
           <div className="entry-orbit" aria-hidden="true"><i /><i /><i /></div>
-          <p className="entry-kicker">{female ? "رسالة خاصة ليكي" : "دعوة خاصة ليك"}</p>
+          <p className="entry-kicker">{female ? "دعوة باسمك ليكي" : "دعوة باسمك ليك"}</p>
           <h1 id="entry-name">{name}</h1>
         </div>
         <p className="entry-copy">
-          {female
-            ? "في رسالة صغيرة مستنياكي… وميعادنا من أول دقيقة، الساعة 7:00 م."
-            : "في دعوة باسمك مستنياك… وتعالى من البداية، الساعة 7:00 م."}
+          {female ? "اللمة ناقصاكي… وتعالي من أول دقيقة." : "الفريق ناقصك… وتعالى من أول دقيقة."}
         </p>
-        <button className="open-invite" onClick={openInvitation}>
+        <p className="coming-question">هتكون معانا؟ <small>YOU IN?</small> <span>👀</span></p>
+        <button className={`open-invite pulse-cta ${joined ? "is-joined" : ""}`} type="button" onClick={openInvitation}>
           <DoorOpen size={19} />
-          <span>{female ? "افتحي رسالتك" : "افتح دعوتك"}</span>
+          <span>{joined ? "يلا بينا" : "افتح الختم"}</span>
+          <b>{joined ? "LET'S GOOOO" : "I'M IN"}</b>
         </button>
+        {joined && <div className="celebration-burst" aria-label="LET'S GOOOO"><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>LET'S GOOOO 🚀</strong></div>}
       </section>
 
-      <section className="entry-countdown" aria-label="الوقت المتبقي للاجتماع">
+      <section className="entry-countdown neon-countdown" aria-label="الوقت المتبقي للاجتماع">
         <p><Clock3 size={15} /> الأربعاء · الحضور والبداية 7:00 م</p>
         <div>
           {clock.map(([value, label]) => <span key={label}><b>{String(value).padStart(2, "0")}</b><small>{label}</small></span>)}
         </div>
+        <button className="countdown-cue" type="button" onClick={() => document.querySelector(".entry-countdown")?.scrollIntoView({ behavior: "smooth", block: "end" })}>COUNTDOWN <ChevronDown size={14} /></button>
       </section>
+
+      {secretOpen && (
+        <div className="secret-modal" role="dialog" aria-modal="true" aria-label="رسالة مخفية">
+          <div>
+            <button type="button" onClick={() => setSecretOpen(false)} aria-label="إغلاق"><X size={18} /></button>
+            <span>YOU FOUND IT 👀</span>
+            <h2>BRO... YOU WEREN'T SUPPOSED TO FIND THIS</h2>
+            <p>بس بما إنك وصلت هنا، متتأخرش عن 7:00 م.</p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
