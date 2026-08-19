@@ -5,6 +5,7 @@ import { CalendarPlus, CheckCircle2, ChevronRight, Copy, Heart, Share2, Sparkles
 import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { VibeToggle } from "@/components/VibeToggle";
+import { getInviteProfile } from "@/lib/inviteProfile";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
 type Session = { time: string; title: string; note: string; featured?: boolean };
@@ -48,8 +49,7 @@ const vibes: Vibe[] = [
 export default function Invite() {
   const [, setLocation] = useLocation();
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const female = params.get("g")?.toLowerCase() === "f";
-  const name = ((params.get("name") || "").trim().replace(/^يا\s+/, "") || (female ? "جميلة" : "بطل"));
+  const profile = useMemo(() => getInviteProfile(), []);
   const [attending, setAttending] = useState(false);
   const [shareNote, setShareNote] = useState("");
   const [reaction, setReaction] = useState<string | null>(null);
@@ -57,33 +57,36 @@ export default function Invite() {
   const [celebrating, setCelebrating] = useState(false);
   const calendar = useMemo(calendarLink, []);
 
-  const sessions: Session[] = female
+  const sessions: Session[] = profile.isFemale
     ? [
         { time: "7:00", title: "الصلاة", note: "نبدأ براحة القلب ودفء اللمة." },
         { time: "7:20", title: "الترانيم", note: "صوت واحد وفرحة بتكبر بينا." },
         { time: "7:30", title: "المفاجأة", note: "مش هنحرقها دلوقتي… بس لازم تكوني موجودة من البداية.", featured: true },
         { time: "8:15", title: "ملحمة الأسر", note: "ضحك وحكايات وقرب أكتر." },
       ]
-    : [
+    : profile.isMale ? [
         { time: "7:00", title: "الصلاة", note: "بداية هادية بقلب واحد." },
         { time: "7:20", title: "الترانيم", note: "صوتك جزء من الصورة." },
         { time: "7:30", title: "المفاجأة", note: "مش هنحرقها دلوقتي… بس تعالى من البداية عشان متفوتكش.", featured: true },
+        { time: "8:15", title: "ملحمة الأسر", note: "لمة وضحك وروح فريق." },
+      ] : [
+        { time: "7:00", title: "الصلاة", note: "بداية هادية بقلب واحد." },
+        { time: "7:20", title: "الترانيم", note: "صوت واحد وفرحة بتكبر بينا." },
+        { time: "7:30", title: "المفاجأة", note: profile.copy.surpriseNote, featured: true },
         { time: "8:15", title: "ملحمة الأسر", note: "لمة وضحك وروح فريق." },
       ];
 
   const backToEntry = () => setLocation(`/?${params.toString()}`);
   const share = async () => {
     const url = window.location.href;
-    const text = female
-      ? "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. ميعادنا من 7:00 م. تعالي معايا من البداية!"
-      : "دي دعوتي لاجتماع الشباب بالأقصر يوم الأربعاء. ميعادنا من 7:00 م. تعالى معايا من البداية!";
+    const text = profile.copy.shareText;
     try {
       if (navigator.share) {
         await navigator.share({ title: "اجتماع الشباب بالأقصر", text, url });
         return;
       }
       await navigator.clipboard.writeText(url);
-      setShareNote("تم نسخ الرابط. ابعته لصاحبك.");
+      setShareNote(profile.copy.copiedLink);
     } catch (error) {
       if ((error as Error).name !== "AbortError") setShareNote("لم نتمكن من فتح المشاركة الآن.");
     }
@@ -101,12 +104,8 @@ export default function Invite() {
     window.setTimeout(() => setCelebrating(false), 1000);
   };
 
-  const opening = female
-    ? { eyebrow: "OPEN YOUR WEDNESDAY", headline: "يا {name}، الحكاية أحلى وإنتِ فيها.", copy: "ناس قريبة، طاقة حلوة، وموعدنا من أول دقيقة." }
-    : { eyebrow: "OPEN YOUR WEDNESDAY", headline: "يا {name}، الفريق مستنيك.", copy: "ناس حلوة، طاقة على مزاجك، وتعالى من أول دقيقة." };
-
   return (
-    <main className={`invite-page pulse-invite ${female ? "invite-female" : "invite-male"}`} dir="rtl">
+    <main className={`invite-page pulse-invite invite-${profile.gender}`} dir="rtl">
       <div className="invite-particles" aria-hidden="true"><i /><i /><i /><i /><i /></div>
       <div className="journey-run" aria-hidden="true"><i /><i /><i /><i /></div>
       <header className="invite-nav">
@@ -117,15 +116,15 @@ export default function Invite() {
 
       <section className="invite-hero story-screen">
         <div className="hero-text">
-          <p className="invite-eyebrow">{opening.eyebrow}</p>
+          <p className="invite-eyebrow">HEY, {profile.name} 👀</p>
           <div className="hero-date-stack" dir="ltr"><strong>WEDNESDAY</strong><span>7:00 PM</span></div>
-          <h1>{opening.headline.replace("{name}", name)}</h1>
-          <p>{opening.copy}</p>
-          <p className="hero-question">OK... <b>ARE YOU IN?</b></p>
+          <h1>{profile.copy.openingHeadline(profile.name)}</h1>
+          <p>{profile.copy.openingBody}</p>
+          <p className="hero-question">{profile.copy.ready} <b>ARE YOU IN?</b></p>
         </div>
         <div className="personal-note neon-note">
-          <span>{female ? "رسالة هذا الأسبوع" : "خطة الليلة"}</span>
-          <strong>{female ? "خدي وقتك، بس متتأخريش عن البداية." : "خلي مكانك في الفريق محسوم من البداية."}</strong>
+          <span>{profile.copy.noteLabel}</span>
+          <strong>{profile.copy.personalNote}</strong>
           <small>7:00 م · الأربعاء</small>
         </div>
       </section>
@@ -140,14 +139,14 @@ export default function Invite() {
       </section>
 
       <section className="program-section story-screen" aria-labelledby="program-title">
-        <div className="program-head"><p>THE NIGHT RUNS LIKE THIS</p><h2 id="program-title">من أول صلاة… لحد المفاجأة اللي مستنياك.</h2></div>
-        <ol className={`male-sessions ${female ? "soft-sessions" : ""}`}>
+        <div className="program-head"><p>THE NIGHT RUNS LIKE THIS</p><h2 id="program-title">{profile.copy.programHeadline}</h2></div>
+        <ol className={`male-sessions ${profile.isFemale ? "soft-sessions" : ""}`}>
           {sessions.map((session) => <li key={session.time} className={session.featured ? "is-main-event" : ""}><time>{session.time}<small>م</small></time><span /><div>{session.featured && <span className="main-event-label"><Sparkles size={12} /> KEEP THIS ONE A SECRET</span>}<h3>{session.title}</h3><p>{session.note}</p></div></li>)}
         </ol>
       </section>
 
       <section className="reaction-section story-screen" aria-labelledby="reaction-title">
-        <div><p className="section-kicker">TAP ONE. IT'S YOUR VIBE.</p><h2 id="reaction-title"><span>داخل بإحساس إيه؟</span><small>WHAT'S YOUR VIBE?</small></h2><span>اختيارك هنا محلي ليك؛ اختار إحساسك قبل ما تقرر.</span></div>
+        <div><p className="section-kicker">TAP ONE. IT'S YOUR VIBE.</p><h2 id="reaction-title"><span>داخل بإحساس إيه؟</span><small>WHAT'S YOUR VIBE?</small></h2><span>{profile.copy.reactionHint}</span></div>
         <div className="reaction-row">
           {vibes.map((vibe) => <button className={reaction === vibe.emoji ? "is-selected" : ""} type="button" key={vibe.emoji} onClick={() => chooseVibe(vibe.emoji)}><b>{vibe.emoji}</b><small>{reaction === vibe.emoji ? "1" : "0"}</small></button>)}
           {flyingReaction && <i className="flying-reaction" aria-hidden="true">{flyingReaction}</i>}
@@ -160,18 +159,18 @@ export default function Invite() {
         <div>
           <p><Sparkles size={15} /> FINAL SCREEN / ختم قرارك</p>
           <div className="final-time" dir="ltr">WEDNESDAY <b>7:00 PM</b></div>
-          <h2>متسمعش عنها بس.<br />خليك حاضر. 🔥</h2>
-          <span>{female ? "هنستناكي من أول دقيقة." : "هنستناك من أول دقيقة."}</span>
+          <h2>{profile.copy.finalLead}<br />{profile.copy.finalStrong} 🔥</h2>
+          <span>{profile.copy.finalWait}</span>
         </div>
         <div className="action-buttons">
           <a className={`calendar-action primary-join ${attending ? "is-attending" : ""}`} href={calendar} target="_blank" rel="noreferrer" onClick={confirmAttendance}>
             {attending ? <CheckCircle2 size={19} /> : <CalendarPlus size={19} />}
-            <span>{attending ? "YOU'RE IN! 🚀" : "I'M COMING 🔥"}</span>
+            <span>{attending ? profile.copy.arrival : profile.copy.attendanceButton}</span>
           </a>
-          <button className="share-action" onClick={share}><Share2 size={18} /> {female ? "شاركي الرسالة" : "شارك الدعوة"}</button>
+          <button className="share-action" onClick={share}><Share2 size={18} /> {profile.copy.shareButton}</button>
           {shareNote && <p className="share-note"><Copy size={14} /> {shareNote}</p>}
         </div>
-        {celebrating && <div className="celebration-burst invite-burst" aria-live="polite"><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>SEE YOU WEDNESDAY ❤️</strong></div>}
+        {celebrating && <div className="celebration-burst invite-burst" aria-live="polite"><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>{profile.copy.celebration}</strong></div>}
       </section>
       <p className="calendar-note"><Heart size={14} /> زر الحضور يفتح الموعد الحقيقي في تقويمك؛ الوصول يبدأ الساعة 7:00 م.</p>
     </main>

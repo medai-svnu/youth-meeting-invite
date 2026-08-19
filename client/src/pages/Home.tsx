@@ -5,6 +5,7 @@ import { CalendarDays, ChevronDown, Clock3, DoorOpen, Sparkles, X } from "lucide
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { VibeToggle } from "@/components/VibeToggle";
+import { getInviteProfile } from "@/lib/inviteProfile";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
 
@@ -38,8 +39,7 @@ export default function Home() {
   const [secretPresses, setSecretPresses] = useState(0);
   const [secretOpen, setSecretOpen] = useState(false);
   const params = useMemo(() => new URLSearchParams(window.location.search), []);
-  const female = params.get("g")?.toLowerCase() === "f";
-  const name = (params.get("name") || "").trim() || (female ? "يا جميلة" : "يا بطل");
+  const profile = useMemo(() => getInviteProfile(), []);
 
   useEffect(() => {
     const timer = window.setInterval(() => setClock(timeUntil(target)), 1000);
@@ -89,7 +89,7 @@ export default function Home() {
   }
 
   return (
-    <main className={`entry-shell pulse-shell ${female ? "entry-female" : "entry-male"}`} dir="rtl">
+    <main className={`entry-shell pulse-shell entry-${profile.gender}`} dir="rtl">
       <div className="entry-art" />
       <div className="entry-overlay" />
       <div className="pulse-particles" aria-hidden="true"><i /><i /><i /><i /><i /><i /></div>
@@ -109,19 +109,19 @@ export default function Home() {
         <p className="hero-time">7:00 <small>PM</small></p>
         <div className="entry-name-ritual">
           <div className="entry-orbit" aria-hidden="true"><i /><i /><i /></div>
-          <p className="entry-kicker">{female ? "دعوة باسمك ليكي" : "دعوة باسمك ليك"}</p>
-          <h1 id="entry-name">{name}</h1>
+          <p className="entry-kicker personal-reveal">{profile.copy.personalInvitation}</p>
+          <h1 id="entry-name" className="cinematic-name">{profile.name}</h1>
         </div>
         <p className="entry-copy">
-          {female ? "اللمة ناقصاكي… وتعالي من أول دقيقة." : "الفريق ناقصك… وتعالى من أول دقيقة."}
+          {profile.copy.openingBody}
         </p>
-        <p className="coming-question">هتكون معانا؟ <small>YOU IN?</small> <span>👀</span></p>
+        <p className="coming-question">{profile.copy.ready} <small>YOU IN?</small> <span>👀</span></p>
         <button className={`open-invite pulse-cta ${joined ? "is-joined" : ""}`} type="button" onClick={openInvitation}>
           <DoorOpen size={19} />
-          <span>{joined ? "يلا بينا" : "افتح الختم"}</span>
-          <b>{joined ? "LET'S GOOOO" : "I'M IN"}</b>
+          <span>{joined ? profile.copy.arrival : profile.copy.openStamp}</span>
+          <b>{joined ? "LET'S GOOOO" : "I'M READY"}</b>
         </button>
-        {joined && <div className="celebration-burst" aria-label="LET'S GOOOO"><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>LET'S GOOOO 🚀</strong></div>}
+        {joined && <div className="celebration-burst" aria-label={profile.copy.celebration}><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>{profile.copy.celebration}</strong></div>}
       </section>
 
       <section className="entry-countdown neon-countdown" aria-label="الوقت المتبقي للاجتماع">
@@ -137,8 +137,8 @@ export default function Home() {
           <div>
             <button type="button" onClick={() => setSecretOpen(false)} aria-label="إغلاق"><X size={18} /></button>
             <span>YOU FOUND IT 👀</span>
-            <h2>BRO... YOU WEREN'T SUPPOSED TO FIND THIS</h2>
-            <p>بس بما إنك وصلت هنا، متتأخرش عن 7:00 م.</p>
+            <h2>{profile.copy.secretTitle}</h2>
+            <p>{profile.copy.lateMessage}</p>
           </div>
         </div>
       )}
