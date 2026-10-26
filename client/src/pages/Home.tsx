@@ -4,7 +4,6 @@
 import { CalendarDays, DoorOpen, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { VibeToggle } from "@/components/VibeToggle";
 import { getInviteProfile } from "@/lib/inviteProfile";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
@@ -73,8 +72,6 @@ export default function Home() {
         </div>
         <div className="header-day"><CalendarDays size={15} /> اجتماع صلاة</div>
       </header>
-      <VibeToggle />
-
       <section className="entry-card pulse-entry" aria-labelledby="entry-name">
         <button className="secret-date" type="button" onClick={unlockSecret} aria-label="اجتماع صلاة">
           اجتماع صلاة <small>PRAYER MEETING</small>
@@ -95,6 +92,12 @@ export default function Home() {
         </button>
         {joined && <div className="celebration-burst" aria-label={profile.copy.celebration}><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>{profile.copy.celebration}</strong></div>}
       </section>
+
+      <aside className="scripture-card entry-scripture" aria-label="آيات عن الصلاة">
+        <span>كلمة تشجعنا</span>
+        <blockquote>«لا تهتموا بشيء، بل في كل شيء بالصلاة والدعاء مع الشكر، لتُعلَم طلباتكم لدى الله.»</blockquote>
+        <small>فيلبي ٤: ٦</small>
+      </aside>
 
       {secretOpen && (
         <div className="secret-modal" role="dialog" aria-modal="true" aria-label="رسالة مخفية">

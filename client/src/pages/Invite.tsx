@@ -4,7 +4,6 @@
 import { CalendarPlus, CheckCircle2, ChevronRight, Copy, Heart, Share2, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
-import { VibeToggle } from "@/components/VibeToggle";
 import { getInviteProfile } from "@/lib/inviteProfile";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
@@ -99,8 +98,6 @@ export default function Invite() {
         <button onClick={backToEntry} className="back-link"><ChevronRight size={18} /> رجوع</button>
         <div className="brand-lockup"><img src={LOGO_URL} className="brand-logo" alt="شعار اجتماع الشباب بالأقصر" /><span>اجتماع الشباب بالأقصر</span></div>
       </header>
-      <VibeToggle />
-
       <section className="invite-hero story-screen">
         <div className="hero-text">
           <p className="invite-eyebrow">HEY, {profile.name} 👀</p>
@@ -157,6 +154,15 @@ export default function Invite() {
           {shareNote && <p className="share-note"><Copy size={14} /> {shareNote}</p>}
         </div>
         {celebrating && <div className="celebration-burst invite-burst" aria-live="polite"><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>{profile.copy.celebration}</strong></div>}
+      </section>
+      <section className="scripture-section" aria-labelledby="scripture-title">
+        <div className="section-kicker">WORDS TO PRAY WITH</div>
+        <h2 id="scripture-title">آيات عن الصلاة</h2>
+        <div className="scripture-grid">
+          <blockquote>«ادعني في يوم الضيق أنقذك فتمجدني.»<small>مزمور ٥٠: ١٥</small></blockquote>
+          <blockquote>«اسألوا تعطوا، اطلبوا تجدوا، اقرعوا يفتح لكم.»<small>متى ٧: ٧</small></blockquote>
+          <blockquote>«قريب هو الرب من كل الذين يدعونه.»<small>مزمور ١٤٥: ١٨</small></blockquote>
+        </div>
       </section>
       <p className="calendar-note"><Heart size={14} /> سجّل الدعوة في تقويمك، وخلي وقت الصلاة محفوظًا عندك.</p>
     </main>

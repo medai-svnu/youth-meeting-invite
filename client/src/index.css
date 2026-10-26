@@ -102,3 +102,25 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--lime); outline-
   .male-sessions li { grid-template-columns: 20px 1fr; }
   .male-sessions::before { right: 9px; }
 }
+
+/* Scripture replaces the optional audio control with a quiet prayer anchor. */
+.scripture-card, .scripture-section {
+  border: 1px solid rgba(37,213,196,.28);
+  background: linear-gradient(135deg, rgba(18,28,59,.86), rgba(26,18,55,.78));
+  box-shadow: inset 0 1px rgba(255,255,255,.06), 0 18px 40px rgba(0,0,0,.18);
+}
+.scripture-card { width: min(100%, 560px); margin: 0 auto 28px; padding: 18px 22px; border-radius: 22px; text-align: center; }
+.scripture-card span, .scripture-section .section-kicker { color: var(--blue); font: 800 10px "Alexandria", sans-serif; letter-spacing: .08em; }
+.scripture-card blockquote { margin: 8px 0 4px; color: var(--paper); font: 700 14px/1.9 "Alexandria", sans-serif; }
+.scripture-card small { color: var(--muted); font-size: 10px; }
+.scripture-section { max-width: 1120px; margin: 0 auto 18px; padding: 32px clamp(20px, 5vw, 55px); border-radius: 28px; text-align: center; }
+.scripture-section h2 { margin: 8px 0 22px; color: var(--paper); font: 800 clamp(25px, 3vw, 38px) "Alexandria", sans-serif; }
+.scripture-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.scripture-grid blockquote { margin: 0; padding: 18px 15px; border: 1px solid rgba(219,168,94,.24); border-radius: 18px; color: var(--paper); background: rgba(7,10,29,.28); font: 700 13px/1.9 "Alexandria", sans-serif; }
+.scripture-grid small { display: block; margin-top: 8px; color: var(--orange); font: 800 10px "Alexandria", sans-serif; }
+@media (max-width: 720px) {
+  .scripture-card { margin-bottom: 18px; padding: 16px 14px; }
+  .scripture-card blockquote { font-size: 12px; }
+  .scripture-grid { grid-template-columns: 1fr; }
+  .scripture-section { padding: 26px 16px; }
+}
