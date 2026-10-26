@@ -42,7 +42,7 @@ async function copyToClipboard(value: string) {
 }
 
 function whatsAppShareUrl(link: InviteLink) {
-  const message = `يا ${link.name} ✨\nدي دعوتك لاجتماع الشباب بالأقصر يوم الأربعاء الساعة 7:00 م.\nمستنيينك من أول دقيقة 🔥\n${link.url}`;
+  const message = `يا ${link.name} 🤍\nدي دعوتك لاجتماع صلاة الشباب بالأقصر.\nالله يسمعنا — ياريت تكون/ي معانا.\n${link.url}`;
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
