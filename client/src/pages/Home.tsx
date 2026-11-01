@@ -1,5 +1,5 @@
 /**
- * Design philosophy: افتتاح هادئ لاجتماع صلاة، يضع الاسم ورسالة «الله يسمعنا» في المركز.
+ * Design philosophy: افتتاح فاخر وهادئ ليوم «شجرة واتنين ليمون» حول الارتباط والاختيار الواعي.
  */
 import { CalendarDays, DoorOpen, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -55,7 +55,7 @@ export default function Home() {
         <p>LOADING PRAYER...</p>
         <div className="loading-track"><i style={{ width: `${progress}%` }} /></div>
         <b>{progress}%</b>
-        <strong>{progress === 100 ? "الله يسمعنا" : "نجهز وقت الصلاة"}</strong>
+        <strong>{progress === 100 ? "شجرة واتنين ليمون" : "نجهز يومًا يستاهل"}</strong>
       </main>
     );
   }
@@ -68,13 +68,13 @@ export default function Home() {
       <header className="site-header">
         <div className="brand-lockup">
           <img src={LOGO_URL} className="brand-logo" alt="شعار اجتماع الشباب بالأقصر" />
-          <span>اجتماع الشباب بالأقصر</span>
+          <span>شجرة واتنين ليمون</span>
         </div>
-        <div className="header-day"><CalendarDays size={15} /> اجتماع صلاة</div>
+        <div className="header-day"><CalendarDays size={15} /> يوم الارتباط</div>
       </header>
       <section className="entry-card pulse-entry" aria-labelledby="entry-name">
-        <button className="secret-date" type="button" onClick={unlockSecret} aria-label="اجتماع صلاة">
-          اجتماع صلاة <small>PRAYER MEETING</small>
+        <button className="secret-date" type="button" onClick={unlockSecret} aria-label="شجرة واتنين ليمون">
+          شجرة واتنين ليمون <small>THE CONNECTION EDIT</small>
         </button>
         <div className="entry-name-ritual">
           <div className="entry-orbit" aria-hidden="true"><i /><i /><i /></div>
@@ -84,19 +84,19 @@ export default function Home() {
         <p className="entry-copy">
           {profile.copy.openingBody}
         </p>
-        <p className="coming-question">{profile.copy.ready} <small>الله يسمعنا</small> <span>🤍</span></p>
+        <p className="coming-question">{profile.copy.ready} <small>خليك واضح</small> <span>🍋</span></p>
         <button className={`open-invite pulse-cta ${joined ? "is-joined" : ""}`} type="button" onClick={openInvitation}>
           <DoorOpen size={19} />
           <span>{joined ? profile.copy.arrival : profile.copy.openStamp}</span>
-          <b>{joined ? "الله يسمعنا" : "I'M READY"}</b>
+          <b>{joined ? "SEE YOU THERE" : "I'M READY"}</b>
         </button>
         {joined && <div className="celebration-burst" aria-label={profile.copy.celebration}><i>✦</i><i>✦</i><i>✦</i><i>✦</i><strong>{profile.copy.celebration}</strong></div>}
       </section>
 
-      <aside className="scripture-card entry-scripture" aria-label="آيات عن الصلاة">
-        <span>كلمة تشجعنا</span>
-        <blockquote>«لا تهتموا بشيء، بل في كل شيء بالصلاة والدعاء مع الشكر، لتُعلَم طلباتكم لدى الله.»</blockquote>
-        <small>فيلبي ٤: ٦</small>
+      <aside className="scripture-card entry-scripture" aria-label="كلمة عن الارتباط">
+        <span>جملة اليوم</span>
+        <blockquote>«الارتباط الصح مش بيقيدك؛ بيخليك أوضح، أهدى، وأقرب لنفسك.»</blockquote>
+        <small>شجرة واتنين ليمون</small>
       </aside>
 
       {secretOpen && (

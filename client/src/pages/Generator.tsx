@@ -42,7 +42,7 @@ async function copyToClipboard(value: string) {
 }
 
 function whatsAppShareUrl(link: InviteLink) {
-  const message = `يا ${link.name} 🤍\nدي دعوتك لاجتماع صلاة الشباب بالأقصر.\nالله يسمعنا — ياريت تكون/ي معانا.\n${link.url}`;
+  const message = `يا ${link.name} 🍋\nدي دعوتك ليوم «شجرة واتنين ليمون».\nكلام صادق عن الارتباط والاختيار والحدود.\n${link.url}`;
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 
@@ -98,7 +98,7 @@ export default function Generator() {
     const objectUrl = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
     const anchor = document.createElement("a");
     anchor.href = objectUrl;
-    anchor.download = "روابط-دعوة-اجتماع-الشباب.txt";
+    anchor.download = "روابط-شجرة-واتنين-ليمون.txt";
     anchor.click();
     URL.revokeObjectURL(objectUrl);
     setNotice("تم تنزيل ملف الروابط.");
@@ -112,13 +112,13 @@ export default function Generator() {
       <div className="generator-spark-field" aria-hidden="true"><i /><i /><i /><i /><i /></div>
       <header className="generator-header">
         <button className="generator-back" type="button" onClick={() => setLocation("/")}><ChevronRight size={18} /> الدعوة</button>
-        <div className="brand-lockup"><img src={LOGO_URL} className="brand-logo" alt="شعار اجتماع الشباب بالأقصر" /><span>اجتماع الشباب بالأقصر</span></div>
+        <div className="brand-lockup"><img src={LOGO_URL} className="brand-logo" alt="شعار شجرة واتنين ليمون" /><span>شجرة واتنين ليمون</span></div>
       </header>
 
       <section className="generator-hero">
         <p><Sparkles size={15} /> LINK LAB / أداة الخدمة</p>
         <h1>حضّر دعوات باسم كل شخص.<br /><b>دفعة واحدة.</b></h1>
-        <span>الرابط يضع الاسم داخل الدعوة تلقائياً، ويختار قالب الأولاد أو البنات من غير أي تعديل يدوي لاحقاً.</span>
+        <span>الرابط يضع الاسم داخل دعوة «شجرة واتنين ليمون» تلقائياً، ويختار قالب الأولاد أو البنات من غير أي تعديل يدوي لاحقاً.</span>
       </section>
 
       <section className="generator-shell" aria-label="مولد روابط الدعوات">
