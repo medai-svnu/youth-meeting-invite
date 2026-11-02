@@ -12,13 +12,7 @@ type Session = { title: string; note: string };
 type Vibe = { emoji: string; title: string; copy: string };
 
 function nextWednesdayAtSeven() {
-  const now = new Date();
-  const target = new Date(now);
-  const distance = (3 - now.getDay() + 7) % 7;
-  target.setDate(now.getDate() + distance);
-  target.setHours(19, 0, 0, 0);
-  if (target.getTime() <= now.getTime()) target.setDate(target.getDate() + 7);
-  return target;
+  return new Date(2026, 10, 4, 19, 0, 0, 0);
 }
 
 function calendarStamp(date: Date) {
