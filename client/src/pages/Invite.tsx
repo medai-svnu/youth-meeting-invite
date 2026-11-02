@@ -1,12 +1,13 @@
 /**
  * Design philosophy: رحلة فخمة وهادئة حول الارتباط والاختيار والحدود الصحية.
  */
-import { CalendarPlus, CheckCircle2, ChevronRight, Copy, Heart, Share2, Sparkles } from "lucide-react";
+import { CalendarPlus, CheckCircle2, ChevronRight, Copy, Heart, MessageCircle, Share2, Sparkles } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useLocation } from "wouter";
 import { getInviteProfile } from "@/lib/inviteProfile";
 
 const LOGO_URL = "/manus-storage/youth-service-logo_a6060761.jpeg";
+const SARHNE_URL = "https://shabab2027.sarhne.com";
 type Session = { title: string; note: string };
 type Vibe = { emoji: string; title: string; copy: string };
 
@@ -135,6 +136,19 @@ export default function Invite() {
           {vibes.map((vibe) => <button className={reaction === vibe.emoji ? "is-selected" : ""} type="button" key={vibe.emoji} onClick={() => chooseVibe(vibe.emoji)}><b>{vibe.emoji}</b><small>{reaction === vibe.emoji ? "1" : "0"}</small></button>)}
           {flyingReaction && <i className="flying-reaction" aria-hidden="true">{flyingReaction}</i>}
         </div>
+      </section>
+
+      <section className="sarhne-section story-screen" aria-labelledby="sarhne-title">
+        <div className="sarhne-mark"><MessageCircle size={22} /></div>
+        <div>
+          <p className="section-kicker">YOUR HONEST TAKE</p>
+          <h2 id="sarhne-title">قول رأيك بصراحة</h2>
+          <p>إيه أكتر حاجة لمستك؟ وإيه السؤال اللي نفسك يتقال؟ اكتب لنا براحتك — رأيك جزء من اليوم.</p>
+        </div>
+        <a className="sarhne-action" href={SARHNE_URL} target="_blank" rel="noreferrer">
+          <MessageCircle size={18} />
+          <span>اكتب رأيك دلوقتي</span>
+        </a>
       </section>
 
       <section className="action-section final-screen story-screen">
