@@ -42,7 +42,7 @@ async function copyToClipboard(value: string) {
 }
 
 function whatsAppShareUrl(link: InviteLink) {
-  const message = `يا ${link.name} 🍋\nدي دعوتك ليوم «شجرة واتنين ليمون».\nكلام صادق عن الارتباط والاختيار والحدود.\n${link.url}`;
+  const message = `يا ${link.name} 🍋\nدي دعوتك ليوم «شجرة واتنين ليمون».\nكلام صادق عن الارتباط والاختيار والحدود.\nمهم جدًا تكتب رأيك بصراحة — صوتك يفرق.\n${link.url}`;
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
 

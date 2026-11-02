@@ -123,6 +123,19 @@ export default function Invite() {
         </div>
       </section>
 
+      <section className="sarhne-section sarhne-featured story-screen" aria-labelledby="sarhne-title">
+        <div className="sarhne-mark"><MessageCircle size={22} /></div>
+        <div>
+          <p className="section-kicker">مهم لكل الشباب · YOUR VOICE MATTERS</p>
+          <h2 id="sarhne-title">صوتك مهم… اكتب لنا بصراحة</h2>
+          <p>مش كفاية تحضر وتسمع — شارك بكلمتك. رأيك وسؤالك وتجربتك ممكن يخلّوا الكلام أقرب لحد تاني.</p>
+        </div>
+        <a className="sarhne-action" href={SARHNE_URL} target="_blank" rel="noreferrer">
+          <MessageCircle size={18} />
+          <span>اكتب رأيك دلوقتي</span>
+        </a>
+      </section>
+
       <section className="program-section story-screen" aria-labelledby="program-title">
         <div className="program-head"><p>THE CONNECTION JOURNEY</p><h2 id="program-title">{profile.copy.programHeadline}</h2></div>
         <ol className={`male-sessions ${profile.isFemale ? "soft-sessions" : ""}`}>
@@ -136,19 +149,6 @@ export default function Invite() {
           {vibes.map((vibe) => <button className={reaction === vibe.emoji ? "is-selected" : ""} type="button" key={vibe.emoji} onClick={() => chooseVibe(vibe.emoji)}><b>{vibe.emoji}</b><small>{reaction === vibe.emoji ? "1" : "0"}</small></button>)}
           {flyingReaction && <i className="flying-reaction" aria-hidden="true">{flyingReaction}</i>}
         </div>
-      </section>
-
-      <section className="sarhne-section story-screen" aria-labelledby="sarhne-title">
-        <div className="sarhne-mark"><MessageCircle size={22} /></div>
-        <div>
-          <p className="section-kicker">YOUR HONEST TAKE</p>
-          <h2 id="sarhne-title">قول رأيك بصراحة</h2>
-          <p>إيه أكتر حاجة لمستك؟ وإيه السؤال اللي نفسك يتقال؟ اكتب لنا براحتك — رأيك جزء من اليوم.</p>
-        </div>
-        <a className="sarhne-action" href={SARHNE_URL} target="_blank" rel="noreferrer">
-          <MessageCircle size={18} />
-          <span>اكتب رأيك دلوقتي</span>
-        </a>
       </section>
 
       <section className="action-section final-screen story-screen">
